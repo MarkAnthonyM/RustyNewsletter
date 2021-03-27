@@ -6,6 +6,16 @@ edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[lib]
+# We could specify a library name using the 'name' field. If unspecified,
+# cargo will default to 'package.name', which is what we want.
+path = "src/lib.rs"
+
+# Double square brackets allow for multiple binaries
+[[bin]]
+path = "src/main.rs"
+name = "zero2prod"
+
 [dependencies]
 # We are using the latest beta release of actix-web
 # that relies on tokio 1.x.x
