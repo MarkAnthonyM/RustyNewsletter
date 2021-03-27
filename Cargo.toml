@@ -7,3 +7,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+# We are using the latest beta release of actix-web
+# that relies on tokio 1.x.x
+# There might be some turbulence - it's a beta after all!
+actix-web = "4.0.0-beta.4"
