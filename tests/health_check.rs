@@ -21,8 +21,7 @@ async fn health_check_works() {
 // Launch our application in the background
 fn spawn_app() -> String {
     // Bind to address
-    let listener = TcpListener::bind("127.0.0.1:0")
-        .expect("Failed to bind random port");
+    let listener = TcpListener::bind("127.0.0.1:0").expect("Failed to bind random port");
     // Retrieve port assgined by OS
     let port = listener.local_addr().unwrap().port();
     let server = zero2prod::run(listener).expect("Failed to bind address");
