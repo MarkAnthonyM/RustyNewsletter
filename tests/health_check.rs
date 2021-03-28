@@ -56,7 +56,7 @@ async fn subscribe_returns_200_for_valid_form_data() {
 }
 
 #[actix_rt::test]
-async fn subcribe_returns_400_when_data_missing() {
+async fn subscribe_returns_400_when_data_missing() {
     // Arrange
     let app_address = spawn_app();
     let client = reqwest::Client::new();
