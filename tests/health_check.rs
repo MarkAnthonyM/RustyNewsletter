@@ -1,4 +1,4 @@
-use sqlx::{PgConnection, Connection};
+use sqlx::{Connection, PgConnection};
 use std::net::TcpListener;
 use zero2prod::configuration::get_configuration;
 
@@ -65,7 +65,7 @@ async fn subscribe_returns_200_for_valid_form_data() {
         .fetch_one(&mut connection)
         .await
         .expect("Failed to fetch saved subscription.");
-    
+
     assert_eq!(saved.email, "Mr_E@gmail.com");
     assert_eq!(saved.name, "Mr E");
 }
@@ -78,7 +78,7 @@ async fn subscribe_returns_400_when_data_missing() {
     let test_cases = vec![
         ("name=le%20guin", "missing email"),
         ("email=ursula_le_guin%40gmail.com", "missing name"),
-        ("", "missing both name and email")
+        ("", "missing both name and email"),
     ];
 
     for (invalid_body, error_message) in test_cases {
