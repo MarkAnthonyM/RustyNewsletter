@@ -21,8 +21,10 @@ name = "zero2prod"
 # that relies on tokio 1.x.x
 # There might be some turbulence - it's a beta after all!
 actix-web = "4.0.0-beta.4"
+chrono = "0.4.15"
 config = "0.11.0"
 serde = { version = "1.0.125", features = ["derive"] }
+uuid = { version = "0.8.1", features = ["v4"] }
 
 [dependencies.sqlx]
 version = "0.5.1"
