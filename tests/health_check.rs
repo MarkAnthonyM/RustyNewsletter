@@ -1,4 +1,6 @@
+use sqlx::{PgConnection, Connection};
 use std::net::TcpListener;
+use zero2prod::configuration::get_configuration;
 
 // Launch our application in the background
 fn spawn_app() -> String {
@@ -39,6 +41,11 @@ async fn health_check_works() {
 async fn subscribe_returns_200_for_valid_form_data() {
     // Arrange
     let app_address = spawn_app();
+    let configuration = get_configuration().expect("Failed to read configuration");
+    let connection_string = configuration.database.connection_string();
+    let mut connection = PgConnection::connect(&connection_string)
+        .await
+        .expect("Failed to connect to Postgres.");
     let client = reqwest::Client::new();
     let body = "name=Mr%20E&email=Mr_E%40gmail.com";
 
@@ -53,6 +60,14 @@ async fn subscribe_returns_200_for_valid_form_data() {
 
     // Assert
     assert_eq!(200, response.status().as_u16());
+
+    let saved = sqlx::query!("SELECT email, name FROM subscriptions",)
+        .fetch_one(&mut connection)
+        .await
+        .expect("Failed to fetch saved subscription.");
+    
+    assert_eq!(saved.email, "Mr_E@gmail.com");
+    assert_eq!(saved.name, "Mr E");
 }
 
 #[actix_rt::test]
