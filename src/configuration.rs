@@ -38,7 +38,7 @@ pub fn get_configuration() -> Result<Settings, config::ConfigError> {
     // Add configuration values from a file named 'configuration'.
     // It will look for any top-level file with an extension
     // that 'config' knows how to parse: yaml, json, etc.
-    settings.merge(config::File::from(configuration_directory.join("personal")).required(true))?;
+    settings.merge(config::File::from(configuration_directory.join("base")).required(true))?;
 
     // Try to convert the configuration values it read into
     // or Settings type
