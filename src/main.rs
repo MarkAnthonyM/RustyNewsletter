@@ -8,7 +8,7 @@ use zero2prod::startup::run;
 async fn main() -> std::io::Result<()> {
     // Setup logger to print all logs at info-level or higher if
     // RUST_LOG environment variable has not been set
-    env_logger::Builder::from_env(Env::default().default_filter_or("trace")).init();
+    env_logger::Builder::from_env(Env::default().default_filter_or("info")).init();
     
     // Panic if we can't read configuration
     let configuration = get_configuration().expect("Failed to read configuration.");
