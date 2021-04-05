@@ -1,6 +1,7 @@
 use actix_web::{web, HttpResponse};
 use chrono::Utc;
 use sqlx::PgPool;
+use tracing_futures::Instrument;
 use uuid::Uuid;
 
 #[derive(serde::Deserialize)]
@@ -15,13 +16,16 @@ pub async fn subscribe(
 ) -> Result<HttpResponse, HttpResponse> {
     // Generate correlation id
     let request_id = Uuid::new_v4();
-    tracing::info!(
-        "request_id {} - Adding '{}' '{}' as a new subscriber",
-        request_id,
-        form.email,
-        form.name
+    let request_span = tracing::info_span!(
+        "Adding a new subscriber",
+        %request_id,
+        email = %form.email,
+        name = %form.name
     );
-    tracing::info!("request_id {} - Saving new subscriber details in the database", request_id);
+    let _request_span_guard = request_span.enter();
+    let query_span = tracing::info_span!(
+        "Saving new subscriber details in the database"
+    );
     sqlx::query!(
         r#"
         INSERT INTO subscriptions (id, email, name, subscribed_at)
@@ -33,12 +37,12 @@ pub async fn subscribe(
         Utc::now()
     )
     .execute(pool.get_ref())
+    .instrument(query_span)
     .await
     .map_err(|e| {
-        tracing::error!("request_id {} - Failed to execute query: {:?}", request_id, e);
+        tracing::error!("Failed to execute query: {:?}", e);
         HttpResponse::InternalServerError().finish()
     })?;
-    tracing::info!("request_id {} - New subscriber details have been saved", request_id);
 
     Ok(HttpResponse::Ok().finish())
 }

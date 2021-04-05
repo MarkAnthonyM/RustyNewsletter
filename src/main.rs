@@ -1,6 +1,8 @@
-use env_logger::Env;
 use sqlx::PgPool;
 use std::net::TcpListener;
+use tracing_subscriber::{layer::SubscriberExt, EnvFilter, Registry};
+use tracing::subscriber::set_global_default;
+use tracing_bunyan_formatter::{BunyanFormattingLayer, JsonStorageLayer};
 use zero2prod::configuration::get_configuration;
 use zero2prod::startup::run;
 
@@ -8,7 +10,18 @@ use zero2prod::startup::run;
 async fn main() -> std::io::Result<()> {
     // Setup logger to print all logs at info-level or higher if
     // RUST_LOG environment variable has not been set
-    env_logger::Builder::from_env(Env::default().default_filter_or("info")).init();
+    let env_filter = EnvFilter::try_from_default_env()
+        .unwrap_or_else(|_| EnvFilter::new("info"));
+    let formatting_layer = BunyanFormattingLayer::new(
+        "zero2prod".into(),
+        // Output the formatted spans to stdout.
+        std::io::stdout
+    );
+    let subscriber = Registry::default()
+        .with(env_filter)
+        .with(JsonStorageLayer)
+        .with(formatting_layer);
+    set_global_default(subscriber).expect("Failed to set subscriber");
     
     // Panic if we can't read configuration
     let configuration = get_configuration().expect("Failed to read configuration.");
