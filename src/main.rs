@@ -11,7 +11,7 @@ async fn main() -> std::io::Result<()> {
     // RUST_LOG environment variable has not been set
     let subscriber = get_subscriber("zero2prod".into(), "info".into());
     init_subscriber(subscriber);
-    
+
     // Panic if we can't read configuration
     let configuration = get_configuration().expect("Failed to read configuration.");
     let connection_string = configuration.database.connection_string();
