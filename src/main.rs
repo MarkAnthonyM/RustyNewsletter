@@ -1,13 +1,17 @@
 use sqlx::PgPool;
 use std::net::TcpListener;
+use tracing_bunyan_formatter::{BunyanFormattingLayer, JsonStorageLayer};
+use tracing_log::LogTracer;
 use tracing_subscriber::{layer::SubscriberExt, EnvFilter, Registry};
 use tracing::subscriber::set_global_default;
-use tracing_bunyan_formatter::{BunyanFormattingLayer, JsonStorageLayer};
 use zero2prod::configuration::get_configuration;
 use zero2prod::startup::run;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    // Redirect all "log's" events to our subscriber
+    LogTracer::init().expect("Failed to set logger");
+    
     // Setup logger to print all logs at info-level or higher if
     // RUST_LOG environment variable has not been set
     let env_filter = EnvFilter::try_from_default_env()
