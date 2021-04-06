@@ -29,6 +29,7 @@ serde = { version = "1.0.125", features = ["derive"] }
 tracing = { version = "0.1", features = ["log"] }
 tracing-bunyan-formatter = "0.2.0"
 tracing-futures = "0.2.5"
+tracing-log = "0.1.2"
 tracing-subscriber = { version = "0.2.12", features = ["registry", "env-filter"] }
 uuid = { version = "0.8.1", features = ["v4"] }
 
