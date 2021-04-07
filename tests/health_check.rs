@@ -24,7 +24,7 @@ async fn spawn_app() -> TestApp {
     // The first time 'initialize' is invoked, the code in 'TRACING' is executed.
     // All other invocations will instead skip execution.
     lazy_static::initialize(&TRACING);
-    
+
     // Bind to address
     let listener = TcpListener::bind("127.0.0.1:0").expect("Failed to bind random port");
     // Retrieve port assgined by OS
