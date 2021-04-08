@@ -6,6 +6,7 @@ FROM rust:1.49
 WORKDIR app
 # Copy all files from working environment to Docker image
 COPY . .
+ENV SQLX_OFFLINE true
 # Build binary
 RUN cargo build --release
 # When 'docker run' is executed, launch the binary
