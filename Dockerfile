@@ -1,14 +1,14 @@
-FROM lukemathwalker/cargo-chef as planner
-WORKDIR app
-COPY . .
+# FROM lukemathwalker/cargo-chef as planner
+# WORKDIR app
+# COPY . .
 # Compute a lock-like file for our project
-RUN cargo chef prepare --recipe-path recipe.json
+# RUN cargo chef prepare --recipe-path recipe.json
 
-FROM lukemathwalker/cargo-chef as cacher
-WORKDIR app
-COPY --from=planner /app/recipe.json recipe.json
+# FROM lukemathwalker/cargo-chef as cacher
+# WORKDIR app
+# COPY --from=planner /app/recipe.json recipe.json
 # Build our project dependencies, not our application
-RUN cargo chef cook --release --recipe-path recipe.json
+# RUN cargo chef cook --release --recipe-path recipe.json
 
 # Use lastest Rust stable release as base image
 FROM rust AS builder
@@ -17,8 +17,8 @@ FROM rust AS builder
 # If 'app' folder does not exist, Docker will create
 WORKDIR app
 # Copy over the cached dependencies
-COPY --from=cacher /app/target target
-COPY --from=cacher /usr/local/cargo /usr/local/cargo
+# COPY --from=cacher /app/target target
+# COPY --from=cacher /usr/local/cargo /usr/local/cargo
 # Copy all files from working environment to Docker image
 COPY . .
 ENV SQLX_OFFLINE true
