@@ -24,6 +24,7 @@ actix-web = "4.0.0-beta.4"
 chrono = "0.4.15"
 config = "0.11.0"
 serde = { version = "1.0.125", features = ["derive"] }
+serde-aux = "2.2.0"
 tracing = { version = "0.1", features = ["log"] }
 tracing-actix-web = "0.3.0-beta.2"
 tracing-bunyan-formatter = "0.2.0"
