@@ -14,11 +14,10 @@ async fn main() -> std::io::Result<()> {
 
     // Panic if we can't read configuration
     let configuration = get_configuration().expect("Failed to read configuration.");
-    let connection_string = configuration.database.connection_string();
     // Bug: Something up with sqlx right now. Need to use connect_lazy for now
     let connection_pool = PgPoolOptions::new()
         .connect_timeout(std::time::Duration::from_secs(2))
-        .connect(&connection_string)
+        .connect_with(configuration.database.without_db())
         .await
         .expect("Failed to connect to Postgres.");
     // let connection_pool = PgPoolOptions::new()
